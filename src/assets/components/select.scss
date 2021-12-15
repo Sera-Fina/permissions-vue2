@@ -1,0 +1,20 @@
+.select {
+  cursor: pointer;
+  width: $width--default;
+  box-sizing: border-box;
+  background-color: $color-white-primary;
+  height: $line-height--default;
+  line-height: $line-height--default;
+  padding: .25rem .5rem;
+  border-radius: $border-radius;
+  &:hover {
+    border-color: $color--primary;
+  }
+  &:focus {
+    border-color: $color--primary;
+  }
+  &:focus-visible {
+    outline-color: $color--primary;
+    border-color: $color--primary;
+  }
+}

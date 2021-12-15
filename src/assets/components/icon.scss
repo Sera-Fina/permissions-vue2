@@ -1,0 +1,29 @@
+.icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  &.edit {
+    background-image: url("~@/assets/icons/edit.svg");
+  }
+  &.save {
+    background-image: url("~@/assets/icons/save.svg");
+  }
+  &.delete {
+    background-image: url("~@/assets/icons/delete.svg");
+  }
+  &.cancel {
+    background-image: url("~@/assets/icons/cancel.svg");
+  }
+  &.add {
+    background-image: url("~@/assets/icons/plus.svg");
+  }
+  &.pagination--to-first {
+    transform: rotate(180deg);
+    background-image: url("~@/assets/icons/arrow.svg");
+  }
+  &.pagination--to-last {
+    background-image: url("~@/assets/icons/arrow.svg");
+  }
+}

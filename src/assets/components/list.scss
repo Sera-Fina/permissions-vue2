@@ -1,0 +1,117 @@
+.list-wrapper {
+  display: flex;
+  flex: 1 1 auto;
+  width: $width--default;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__list {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 0;
+    list-style-type: none;
+    margin: 0 -.125rem 0 0;
+    &__item {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: $line-height--default;
+      padding: 0 .5rem;
+      border: $border $color--primary;
+      margin-bottom: .25rem;
+      background-color: #CCCCCC;
+      &--after-one {
+        box-sizing: border-box;
+        margin: 0;
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        width: $width--default;
+        &:nth-child(1) {
+          border-top: $border $color--primary;
+        }
+        &:nth-child(odd) {
+          background-color: $color-white-primary;
+        }
+      }
+      &__title {
+        display: flex;
+        flex: 0 1 80%;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: hidden;
+        &__text {
+          line-height: $line-height--default;
+          text-align: start;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        &__tags {
+          margin-left: 1rem;
+          padding: 0 .5rem;
+          text-align: start;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          color: $color-white-primary;
+          background-color: #333333;
+          max-width: 30%;
+        }
+      }
+      &__buttons {
+        flex: 1 1 auto;
+        justify-content: flex-end;
+        display: inherit;
+        align-items: center;
+      }
+      &--selected {
+        background-color: $color-white-primary;
+        border-right-color: $color-white-primary;
+      }
+    }
+  }
+  &__buttons {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1rem;
+      &__item {
+      width: 80%;
+      display: flex;
+      border-color: transparent;
+      background-color: transparent;
+      font-weight: bold;
+      .icon {
+        margin-right: 1rem;
+      }
+      &:hover {
+        border-color: $color--primary;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 750px) {
+  .list-wrapper__buttons__item {
+    width: 50%;
+    margin: 0 25%;
+    .icon {
+      margin-right: 0;
+    }
+    .title {
+      display: none;
+    }
+  }
+}
+@media screen and (max-width: 550px) {
+  .list-wrapper__list{
+    margin: 0;
+    &__item--selected {
+        border-right-color: $color--primary;
+      }
+    }
+}

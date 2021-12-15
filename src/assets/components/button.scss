@@ -1,0 +1,30 @@
+.button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $line-height--default;
+  border-radius: $border-radius;
+  min-width: 2rem;
+  .icon {
+    min-width: 1rem;
+  }
+  .title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  &.only-icon {
+    box-sizing: content-box;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    padding: 0.125rem;
+    margin: 0;
+    border-color: transparent;
+    background-color: transparent;
+    &:hover {
+      border-color: $color--primary;
+    }
+  }
+}

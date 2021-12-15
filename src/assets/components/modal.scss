@@ -1,0 +1,70 @@
+.modal-wrapper {
+  position: fixed;
+  width: $width--default;
+  height: $height--default;
+  left: 0;
+  top: 0;
+  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.5);
+  .modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 10%;
+    left: 50%;
+    width: 50%;
+    height: 70%;
+    transform: translate(-50%, 0);
+    background-color: $color-white-primary;
+    border-radius: $border-radius;
+    border: $border $color--primary;
+    &__header, &__footer {
+      display: flex;
+      flex: 0 1 auto;
+      margin: 0 1rem;
+      padding: 1rem;
+    }
+
+    &__header {
+      position: relative;
+      border-bottom: 1px solid rgb(128, 128, 128);
+      box-shadow: 0 5px 5px -5px rgb(128, 128, 128);
+      &__title {
+        display: flex;
+        flex: 1 1 auto;
+        color: $color--primary;
+      }
+      &__close {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        cursor: pointer;
+      }
+    }
+    &__body {
+      display: flex;
+      flex: 1 1 auto;
+      padding: 1rem 2rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    &__footer {
+      box-shadow: 0 -5px 5px -5px rgba(128, 128, 128, 0.6);
+      border-top: 1px solid rgba(128, 128, 128, .5);
+      &__buttons {
+        display: flex;
+        flex: 1 1 $width--default;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    @media screen and (max-width: 800px) {
+      width: 70%;
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 90%;
+    }
+  }
+}

@@ -1,0 +1,106 @@
+@import "variables/index";
+@import "components/index";
+@import "src/assets/layouts/main-layout";
+
+html {
+  @media screen and (max-width: 550px) {
+    font-size: 12px;
+  }
+  @media screen and (max-width: 400px) {
+    font-size: 10px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: .3125rem;
+  box-sizing: border-box;
+  color: $color--primary;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+}
+
+.header {
+  z-index: 1;
+  flex: 0 1 auto;
+  display: inherit;
+  align-items: center;
+  box-sizing: border-box;
+  justify-content: space-between;
+  width: $width--default;
+  border-bottom: $border $color--primary;
+
+  &__navbar, &__navbar__link , &__title {
+    display: inherit;
+    font-weight: bold;
+    align-items: center;
+    height: $width--default;
+  }
+
+  &__title {
+    text-align: start;
+    font-size: $font__navbar__title;
+  }
+  &__navbar {
+    justify-content: flex-end;
+    &__link {
+      margin-left: 1rem;
+      text-decoration: none;
+      box-sizing: border-box;
+      color: $color--primary;
+      font-size: $font__navbar__link;
+      &--active {
+        color: $color--primary;
+        border-bottom: $border--large $color--primary;
+      }
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    flex-direction: column;
+    &__title {
+      flex: 0 1 auto;
+    }
+    &__navbar {
+      flex: 1 1 auto;
+    }
+    &__title, &__navbar {
+      width: $width--default;
+    }
+  }
+}
+
+.main {
+  display: inherit;
+  flex: 1 1 auto;
+  overflow: hidden;
+  z-index: 1;
+  .page {
+    display: inherit;
+    flex: 1 1 auto;
+    width: $width--default;
+  }
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: url('~@/assets/images/main-backgroud.jpeg');
+  background-size: cover;
+  opacity: 0.2;
+  width: $width--default;
+  height: $height--default;
+}
