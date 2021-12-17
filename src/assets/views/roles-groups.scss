@@ -1,6 +1,7 @@
 .page--roles-groups {
   & .custom-filter__item {
     display: flex;
+    flex: 1 1 auto;
     margin-right: .5rem;
     align-items: center;
     &__checkbox {
@@ -11,6 +12,15 @@
         white-space: nowrap;
         line-height: $line-height--default;
       }
+    }
+  }
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .page--roles-groups {
+    & .custom-filter__item {
+      display: inline-block;
+      flex: none;
     }
   }
 }
