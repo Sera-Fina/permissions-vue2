@@ -10,9 +10,11 @@
             {'list-wrapper__list__item--selected': selected.id === listItem.id}
             , customItemClass]"
           class="list-wrapper__list__item"
-          @click="setSelected(listItem)"
       >
-        <span class="list-wrapper__list__item__title">
+        <span
+            class="list-wrapper__list__item__title"
+            @click="setSelected(listItem)"
+        >
           <input
               v-if="withCheckbox"
               class="list-wrapper__list__item__title__checkbox checkbox"
@@ -27,10 +29,10 @@
             {{ listItem.name }}
           </span>
           <span
-              v-if="withCheckbox && listItem.tags"
+              v-if="withCheckbox && listItem.tags && listItem.tags.length"
               class="list-wrapper__list__item__title__tags"
           >
-            {{ listItem.tags.join(', ') }}
+            {{ getTagsNames(listItem) }}
           </span>
           <input
               v-if="listItem.buttons && listItem.buttons.includes('save')"
@@ -45,7 +47,7 @@
             :key="index"
           >
             <button
-                class="button only-icon"
+                class="button button--only-icon"
                 v-if="listItem.buttons && listItem.buttons.includes(button.type)"
                 @click="actionButtonHandler(button.type, listItem)"
             >
@@ -138,6 +140,7 @@ export default {
     actionButtonHandler(type, item) {
       switch (type) {
         case 'edit' :
+          this.setSelected(item)
           this.$emit('toggleButtons', { buttons: ['save', 'cancel'], id: item.id })
           break
         case 'save' :
@@ -154,6 +157,9 @@ export default {
           return
       }
     },
+    getTagsNames(item) {
+      return item.tags.map(item => item.name).join(', ')
+    }
   },
 };
 </script>

@@ -21,15 +21,16 @@
       <template #search>
         <input class="input" placeholder="Search" v-model="search" @input="debounceSearch">
       </template>
-      <template #sort>
-        <select class="select">
-          <option>checked</option>
-          <option>unchecked</option>
-          <option>tags</option>
+      <template #filter>
+        <select class="select" @change="filterChange">
+          <option :value="filterTypes.all">all</option>
+          <option :value="filterTypes.checked">checked</option>
+          <option :value="filterTypes.unchecked">unchecked</option>
         </select>
       </template>
       <template #body>
         <List
+            v-if="showSecondList"
             custom-item-class="list-wrapper__list__item--after-one"
             :items="permissionsList"
             :selectable="false"
@@ -64,8 +65,9 @@ import Pagination from '@/components/Pagination.vue';
 import {
   filterTypes,
   getPermissions, getRoles, getRolesGroups, setRoles, setRolesGroups,
-} from '@/modules/permissions';
+} from '@/modules/permissionsStorage.module';
 import AddRoleModal from './modals/AddRoleModal.vue';
+import debounce from "lodash.debounce";
 
 export default {
   name: 'Roles',
@@ -77,6 +79,7 @@ export default {
   },
   data() {
     return {
+      filterTypes,
       permissionsList: [],
       rolesList: [],
       addModalVisible: false,
@@ -86,12 +89,15 @@ export default {
       total: 0,
       currentPage: 1,
       search: '',
-      filter: { type: filterTypes.all },
+      filterType: filterTypes.all,
     };
   },
   computed: {
     checked() {
-      return this.selected?.permissions || []
+      return this.selected?.permissions?.map(item => item.id) || []
+    },
+    showSecondList() {
+      return this.selected && this.selected.id && this.rolesList.length
     }
   },
   created() {
@@ -101,18 +107,27 @@ export default {
   methods: {
     updateRoles() {
       this.rolesList = getRoles().list;
-      this.selected = this.rolesList[0];
+      this.selected = this.rolesList[0] || {};
     },
     updatePermissions() {
-      const res = getPermissions(this.currentPage, this.filter, this.search, this.checked);
+      const res = getPermissions({
+        page: this.currentPage,
+        mainFilter: this.filterType,
+        customFilters: {},
+        search: this.search,
+        checked: this.checked
+      });
       this.permissionsList = res.list
-      this.total = res.total
+      this.total = res.total;
     },
-    debounceSearch() {
+    debounceSearch: debounce(function (e) {
+      e.preventDefault()
       this.currentPage = 1
       this.updatePermissions()
-    },
-    filterChange() {
+    }, 1000),
+    filterChange(e) {
+      e.preventDefault()
+      this.filterType = e.target.value
       this.currentPage = 1
       this.updatePermissions()
     },
@@ -160,10 +175,10 @@ export default {
     toggleListItemCheckbox(checkedItem) {
       const newList = this.rolesList.map((item) => {
         if (item.id === this.selected.id) {
-          if (this.selected.permissions?.includes(checkedItem.id)) {
-            item.permissions = item.permissions.filter((role) => role !== checkedItem.id);
+          if (this.checked?.includes(checkedItem.id)) {
+            item.permissions = item.permissions.filter((permission) => permission.id !== checkedItem.id);
           } else {
-            item.permissions.push(checkedItem.id);
+            item.permissions.push(checkedItem);
           }
         }
         return item;

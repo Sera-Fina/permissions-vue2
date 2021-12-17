@@ -28,7 +28,7 @@
 <script>
 import Modal from '@/components/Modal';
 import List from '@/components/List';
-import { getRoles } from '@/modules/permissions';
+import { getRoles } from '@/modules/permissionsStorage.module';
 
 export default {
   name: 'AddGroupModal',

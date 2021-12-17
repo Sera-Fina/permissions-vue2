@@ -1,5 +1,12 @@
 # test-vue2
 
+## Project description (notes)
+```
+1. There is no vuex as localStogare is used so it is useless.
+2. I know it can be made through one components as pages have repeated functionality,
+ but I did not unite them as they are responsible for different bussiness logic (groups and roles).
+```
+
 ## Project setup
 ```
 npm install

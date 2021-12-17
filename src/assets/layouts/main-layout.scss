@@ -5,15 +5,12 @@ $font__main-layout__content__header__title: $font-heading;
   flex: 1 1 auto;
   overflow: hidden;
   z-index: 1;
-  @media screen and (max-width: 550px) {
-    flex-direction: column;
-  }
   &__sidebar, &__content {
     display: flex;
     box-sizing: border-box;
   }
   &__sidebar {
-    flex: 0 1 30%;
+    flex: 1 1 30%;
     width: 30%;
     padding: 1rem 0;
     border-right: $border $color--primary;
@@ -21,19 +18,21 @@ $font__main-layout__content__header__title: $font-heading;
   &__content {
     padding: 1rem;
     overflow: hidden;
-    flex: 1 1 auto;
+    flex: 1 1 70%;
     flex-direction: column;
     &__header, &__body, &__footer {
       display: inherit;
       align-items: center;
+      &--no-data {
+        width: $width--default;
+      }
     }
     &__header {
       flex: 0 1 auto;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       padding-bottom: 1rem;
       &__title {
         flex: 0 1 auto;
-        min-width: 30%;
         font-size: $font__main-layout__content__header__title;
         font-weight: bold;
         text-align: start;
@@ -41,7 +40,19 @@ $font__main-layout__content__header__title: $font-heading;
         text-overflow: ellipsis;
         overflow: hidden;
       }
-      &__search, &__sort {
+      &__filter--custom {
+        flex: 0 1 $width--default;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-top: 1rem;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+          display: none; /* for Chrome, Safari, and Opera */
+        }
+        -ms-overflow-style: none;
+      }
+      &__search, &__filter {
         flex: 1 1 auto;
         box-sizing: border-box;
         padding-left: 1rem;
@@ -63,6 +74,7 @@ $font__main-layout__content__header__title: $font-heading;
 
 @media screen and (max-width: 550px) {
   .main-layout {
+    flex-direction: column;
     &__sidebar {
       width: $width--default;
       height: 30%;

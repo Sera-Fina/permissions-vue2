@@ -28,7 +28,7 @@
 <script>
 import Modal from '@/components/Modal';
 import List from '@/components/List';
-import { getPermissions } from '@/modules/permissions';
+import { getPermissions } from '@/modules/permissionsStorage.module';
 
 export default {
   name: 'AddRoleModal',
@@ -54,16 +54,16 @@ export default {
   },
   mounted() {
     this.permissions = getPermissions().list;
-    console.log(this.permissions);
   },
   methods: {
     toggleChecked(checkedItem) {
       const selected = this.permissions.find((item) => item?.id === checkedItem.id);
       if (selected) {
-        if (this.form.checked?.includes(selected?.id)) {
-          this.form.checked = this.form.checked.filter((item) => item !== selected?.id);
+        const checkedIds = this.form.checked.map(checked => checked.id)
+        if (checkedIds.includes(selected?.id)) {
+          this.form.checked = this.form.checked.filter((item) => item.id !== selected?.id);
         } else {
-          this.form.checked.push(selected?.id);
+          this.form.checked.push(selected);
         }
       }
     },

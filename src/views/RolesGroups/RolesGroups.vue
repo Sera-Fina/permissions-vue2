@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page page--roles-groups">
     <MainLayout>
       <template #sidebar>
         <List
@@ -21,15 +21,24 @@
       <template #search>
         <input class="input" placeholder="Search" v-model="search" @input="debounceSearch">
       </template>
-      <template #sort>
-        <select class="select">
-          <option>checked</option>
-          <option>unchecked</option>
-          <option>tags</option>
+      <template #filter>
+        <select class="select" @change="mainFilterChange">
+          <option :value="filterTypes.all">all</option>
+          <option :value="filterTypes.checked">checked</option>
+          <option :value="filterTypes.unchecked">unchecked</option>
         </select>
+      </template>
+      <template #customFilter>
+        <div class="custom-filter__item" v-for="permission in permissionsList">
+          <input class="custom-filter__item__checkbox" type="checkbox" @change="customFilterChange(permission)">
+          <span class="custom-filter__item__checkbox__title">
+            {{ permission.name }}
+          </span>
+        </div>
       </template>
       <template #body>
         <List
+            v-if="showSecondList"
             custom-item-class="list-wrapper__list__item--after-one"
             :items="rolesList"
             :selectable="false"
@@ -42,7 +51,7 @@
       <template #pagination>
         <Pagination
             :total="total"
-            :per-page="5"
+            :per-page="10"
             :current-page="currentPage"
             @pageChange="pageChangeHandler"
         />
@@ -62,7 +71,8 @@ import MainLayout from '@/layouts/MainLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 import List from '@/components/List.vue';
 import AddGroupModal from './modals/AddGroupModal.vue';
-import {filterTypes, getRoles, getRolesGroups, setRolesGroups} from '@/modules/permissions';
+import debounce from 'lodash.debounce'
+import {filterTypes, getPermissions, getRoles, getRolesGroups, setRolesGroups} from '@/modules/permissionsStorage.module';
 
 export default {
   name: 'RolesGroups',
@@ -74,8 +84,10 @@ export default {
   },
   data() {
     return {
+      filterTypes,
       addModalVisible: false,
       rolesGroupsList: [],
+      permissionsList: [],
       rolesList: [],
       selected: {
         id: 0
@@ -83,27 +95,38 @@ export default {
       total: 0,
       currentPage: 1,
       search: '',
-      filter: { type: filterTypes.all },
+      mainFilterType: filterTypes.all,
+      customFilterValue: [],
     };
   },
   computed: {
     checked() {
       return this.selected?.checkedRoles || []
+    },
+    showSecondList() {
+      return this.selected && this.selected.id && this.rolesList.length
     }
   },
   mounted() {
+    this.permissionsList = getPermissions().list;
     this.updateRolesGroups();
     this.updateRoles()
   },
   methods: {
     updateRoles() {
-      const res = getRoles(this.currentPage, this.filter, this.search, this.checked);
+      const res = getRoles({
+        page: this.currentPage,
+        mainFilter: this.mainFilterType,
+        customFilters: {tags: this.customFilterValue},
+        search: this.search,
+        checked: this.checked
+      });
       this.rolesList = res.list
       this.total = res.total
     },
     updateRolesGroups() {
       this.rolesGroupsList = getRolesGroups();
-      this.selected = this.rolesGroupsList[0];
+      this.selected = this.rolesGroupsList[0] || {};
     },
     editItemHandler(options) {
       const newList = this.rolesGroupsList.map(
@@ -125,7 +148,18 @@ export default {
       this.currentPage = selectedPage;
       this.updateRoles()
     },
-    filterChange() {
+    mainFilterChange(e) {
+      e.preventDefault()
+      this.mainFilterType = e.target.value
+      this.currentPage = 1
+      this.updateRoles()
+    },
+    customFilterChange(filterItem) {
+      if (this.customFilterValue.includes(filterItem.id)) {
+        this.customFilterValue = this.customFilterValue.filter(value => value !== filterItem.id)
+      } else {
+        this.customFilterValue.push(filterItem.id)
+      }
       this.currentPage = 1
       this.updateRoles()
     },
@@ -142,9 +176,11 @@ export default {
       this.updateRolesGroups();
       this.addModalVisible = false;
     },
-    debounceSearch() {
+    debounceSearch: debounce(function (e) {
+      e.preventDefault()
+      this.currentPage = 1
       this.updateRoles()
-    },
+    }, 1000),
     toggleListItemCheckbox(checkedItem) {
       const newList = this.rolesGroupsList.map((item) => {
         if (item?.id === this.selected.id) {

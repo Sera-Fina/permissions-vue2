@@ -1,0 +1,16 @@
+.page--roles-groups {
+  & .custom-filter__item {
+    display: flex;
+    margin-right: .5rem;
+    align-items: center;
+    &__checkbox {
+      margin: 0 .5rem 0 0;
+      height: 1rem;
+      width: 1rem;
+      &__title {
+        white-space: nowrap;
+        line-height: $line-height--default;
+      }
+    }
+  }
+}

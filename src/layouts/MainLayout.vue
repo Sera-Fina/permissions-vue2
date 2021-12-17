@@ -11,12 +11,16 @@
         <div class="main-layout__content__header__search" >
           <slot name="search"/>
         </div>
-        <div class="main-layout__content__header__sort">
-          <slot name="sort"/>
+        <div class="main-layout__content__header__filter">
+          <slot name="filter"/>
+        </div>
+        <div v-if="$slots['customFilter']" class="main-layout__content__header__filter--custom">
+          <slot name="customFilter"/>
         </div>
       </div>
       <div class="main-layout__content__body">
-          <slot name="body"/>
+        <slot name="body" v-if="$slots['body']" />
+        <span v-else class="main-layout__content__body--no-data"> Нет данных </span>
       </div>
       <div class="main-layout__content__footer">
           <slot name="pagination"/>
